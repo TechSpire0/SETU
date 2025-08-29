@@ -1,0 +1,11 @@
+fastapi[all]
+
+sqlalchemy
+
+psycopg2-binary
+
+GeoAlchemy2
+
+alembic
+
+python-dotenv

@@ -1,0 +1,14 @@
+# 1. Environment variables - DO NOT COMMIT THIS
+.env
+
+# 2. Python virtual environment
+venv/
+*.pyc
+__pycache__/
+
+# 3. Docker
+.dockerignore
+
+# 4. IDE/Editor specific files
+.vscode/
+.idea/

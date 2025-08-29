@@ -1,0 +1,41 @@
+# 1. Main services block.
+services:
+  # 2. Defines the backend API service.
+  backend:
+    container_name: marine_api_service
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    env_file:
+      - ./.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # 3. Defines the PostgreSQL database service.
+  db:
+    # 4. Specifies the pre-built Docker image to use.
+    image: postgis/postgis:15-3.3
+    # 5. Assigns a static, readable name to the container.
+    container_name: marine_db_service
+    # 6. Maps port 5432 on your local machine to port 5432 inside the container.
+    ports:
+      - "5432:5432"
+    # 7. Mounts a named volume to persist database data.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    # 8. THIS IS THE CRUCIAL MISSING PIECE: Loads variables from the .env file for this service.
+    env_file:
+      - ./.env
+    # 9. Defines a command to check if the database is ready for connections.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# 10. Declares the named volume used by the db service.
+volumes:
+  postgres_data:
