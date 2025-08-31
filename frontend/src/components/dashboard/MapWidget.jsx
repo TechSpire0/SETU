@@ -33,7 +33,15 @@ function MapWidget() {
   return (
     <div className="h-[500px] w-full rounded-lg shadow-md overflow-hidden">
       {/* 'MapContainer' is the main component that creates the map. */}
-      <MapContainer center={initialPosition} zoom={5} style={{ height: '100%', width: '100%' }}>
+      {/* --- THE FIX --- */}
+      {/* We've added a className with z-0. Since our Header has a z-index of 30, */}
+      {/* this explicitly tells the browser to render the map on a lower layer. */}
+      <MapContainer 
+        center={initialPosition} 
+        zoom={5} 
+        style={{ height: '100%', width: '100%' }}
+        className="z-0" 
+      >
         
         {/* 'TileLayer' is responsible for the visual map tiles (the background map image). */}
         {/* We're using OpenStreetMap, a free and open-source map provider. */}
@@ -64,3 +72,4 @@ function MapWidget() {
 }
 
 export default MapWidget;
+

@@ -1,40 +1,42 @@
-// src/components/layout/Header.jsx
-
 import React from 'react';
 
-// This is the top navigation bar of our application.
-function Header() {
+function Header({ sidebarOpen, onPinToggle, onMouseEnter }) {
   return (
-    // 'header' is a semantic HTML5 tag for the top section of a page.
-    // Tailwind CSS classes are used for styling.
     <header
-      className="
-        fixed           // Keeps the header at the top of the viewport.
-        top-0           // Positions it at the very top.
-        left-64         // Starts it to the right of the sidebar (width 64 = 16rem).
-        right-0         // Stretches it to the right edge of the viewport.
-        bg-white        // Sets a solid white background color.
-        p-4             // Applies 1rem of padding on all sides.
-        border-b        // Adds a 1px border to the bottom.
-        border-gray-200 // Sets the border color to a light gray.
-        flex            // Enables flexbox layout.
-        justify-between // Pushes child elements to opposite ends (left and right).
-        items-center    // Aligns child elements vertically in the center.
-        z-10            // Ensures the header stays above the main content.
-      "
+      className={`
+        fixed top-0 bg-white p-4 border-b border-gray-200 
+        flex justify-between items-center z-20 
+        transition-all duration-300 right-0
+        ${sidebarOpen ? 'lg:left-64' : 'left-0'} 
+      `}
     >
-      {/* Left side of the header */}
-      <div>
-        <h1 className="text-xl font-semibold text-gray-800">Species Explorer</h1>
+      <div className="flex items-center">
+        {/* This button is only visible when the sidebar is CLOSED. */}
+        {/* It handles both opening on hover and pinning on click. */}
+        <button 
+          onClick={onPinToggle}
+          onMouseEnter={onMouseEnter}
+          className={`fixed top-2 left-2 p-2 rounded-full text-gray-500 z-50 transition-all duration-300 hover:bg-gray-100 hover:text-gray-800 ${
+            !sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+
+        <h1 className="text-xl font-semibold text-gray-800 ml-16 hidden sm:block">
+          Species Explorer
+        </h1>
       </div>
 
-      {/* Right side of the header */}
       <div className="flex items-center space-x-4">
-        <span className="text-gray-600">Jayanth (Lead Developer)</span>
-        <div className="w-10 h-10 bg-blue-500 rounded-full"></div> {/* Placeholder for a user avatar */}
+        <span className="text-gray-600 hidden md:block">Jayanth (Lead Developer)</span>
+        <div className="w-10 h-10 bg-blue-500 rounded-full"></div>
       </div>
     </header>
   );
 }
 
 export default Header;
+
