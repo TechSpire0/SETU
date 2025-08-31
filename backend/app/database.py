@@ -2,7 +2,7 @@
 import os
 # 2. Import necessary components from SQLAlchemy.
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.orm import sessionmaker
 # 3. Import the 'load_dotenv' function to load our .env file.
 from dotenv import load_dotenv
