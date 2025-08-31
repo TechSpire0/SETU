@@ -1,5 +1,6 @@
 # 1. Import necessary components from SQLAlchemy and GeoAlchemy2.
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, TIMESTAMP, Date, Numeric
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from geoalchemy2 import Geometry
 
@@ -34,6 +35,7 @@ class Sighting(Base):
     salinity_psu = Column(Numeric(5, 2))
     chlorophyll_mg_m3 = Column(Numeric(7, 4))
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+    species = relationship("Species")
 
 # 9. Define the Otolith class, mapping to the 'otoliths' table.
 class Otolith(Base):

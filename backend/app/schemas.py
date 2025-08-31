@@ -1,34 +1,31 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 from datetime import date
 
-# --- Base Schemas for Core Entities ---
-
-class SpeciesBase(BaseModel):
-    scientific_name: str = Field(..., example="Sardinella longiceps")
-    common_name: str = Field(..., example="Indian Oil Sardine")
-    description: Optional[str] = Field(None, example="A key commercial fish found in the Arabian Sea.")
-    habitat: Optional[str] = Field(None, example="Coastal pelagic")
-
-class Species(SpeciesBase):
+# This schema is defined first, as it's needed by the Sighting schema.
+class Species(BaseModel):
     id: int
-    class Config:
-        orm_mode = True
+    scientific_name: str
+    common_name: str
+    description: Optional[str] = None
+    habitat: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
 
+# FINAL SIMPLIFIED Sighting Schema
+# No validators, no complex logic. This is a simple data container.
 class Sighting(BaseModel):
-    sighting_id: str = Field(..., example="CMLRE-2025-10A")
-    species_id: int = Field(..., example=1)
-    latitude: float = Field(..., example=15.4989)
-    longitude: float = Field(..., example=73.8278)
-    sighting_date: date = Field(..., example="2025-05-21")
-    sea_surface_temp_c: Optional[float] = Field(None, example=28.5)
-    salinity_psu: Optional[float] = Field(None, example=35.1)
-    chlorophyll_mg_m3: Optional[float] = Field(None, example=0.4)
-    class Config:
-        orm_mode = True
-
-# --- Schemas for API Responses ---
+    sighting_id: str
+    latitude: float
+    longitude: float
+    sighting_date: date
+    sea_surface_temp_c: Optional[float] = None
+    salinity_psu: Optional[float] = None
+    chlorophyll_mg_m3: Optional[float] = None
+    species: Species
+    model_config = ConfigDict(from_attributes=True)
 
 class PaginatedSpeciesResponse(BaseModel):
     count: int
     results: List[Species]
+
+    model_config = ConfigDict(from_attributes=True)
