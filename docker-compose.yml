@@ -2,7 +2,11 @@ services:
   # Defines our backend service
   backend:
     container_name: marine_api_service
-    # The build context is now the 'backend' sub-directory
+    # --- CHANGE #1: ADD THE PLATFORM KEY HERE ---
+    # This tells Docker which architecture to build the image for.
+    # Use 'linux/amd64' for Intel/AMD CPUs.
+    # Use 'linux/arm64' for Apple Silicon (M1/M2/M3) or other ARM CPUs.
+    # platform: linux/amd64 # Or linux/arm64
     build: ./backend
     ports:
       - "8000:8000"
@@ -13,6 +17,12 @@ services:
     depends_on:
       db: { condition: service_healthy }
       minio: { condition: service_healthy }
+    # --- IMPORTANT NOTE ON GPU ---
+    # The 'deploy' section below requires the NVIDIA Container Toolkit to be
+    # installed and configured on your host machine.
+    # If you DO NOT have an NVIDIA GPU or the toolkit is not installed,
+    # this will cause an error. In that case, you should DELETE this
+    # entire 'deploy' section.
     deploy:
       resources:
         reservations:
@@ -24,14 +34,18 @@ services:
   # Defines our new frontend service
   frontend:
     container_name: marine_ui_service
+    # --- CHANGE #2: ADD THE PLATFORM KEY HERE AS WELL ---
+    # Ensure this matches the platform you set for the backend.
+    platform: linux/amd64 # Or linux/arm64
     build: ./frontend
     ports:
       - "3000:3000"
     volumes:
+      # This anonymous volume is a smart way to protect the container's
+      # node_modules from being overwritten by the host. Do not change this.
       - ./frontend:/app/
       - /app/node_modules
     environment:
-      # This ensures React's hot-reloading works correctly inside Docker
       - WDS_SOCKET_PORT=3000
 
   # DB and MinIO services are defined as before
@@ -48,6 +62,9 @@ services:
       retries: 5
 
   minio:
+    # --- RECOMMENDATION ---
+    # Using ':latest' can lead to unexpected breaking changes.
+    # It's better to pin to a specific version, e.g., 'minio/minio:RELEASE.2024-01-25T05-50-51Z'
     image: minio/minio:latest
     container_name: marine_minio_service
     ports: ["9000:9000", "9001:9001"]

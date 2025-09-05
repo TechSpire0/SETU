@@ -91,11 +91,11 @@ function OtolithClassifier() {
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div 
               className="bg-green-500 h-2.5 rounded-full" 
-              style={{ width: `${result.confidence_score * 100}%` }}
+              style={{ width: `${result.confidence_score}%` }}
             ></div>
           </div>
           <p className="text-right text-sm text-gray-600 mt-1">
-            Confidence: {Math.round(result.confidence_score * 100)}%
+            Confidence: {Math.round(result.confidence_score)}%
           </p>
         </div>
       )}

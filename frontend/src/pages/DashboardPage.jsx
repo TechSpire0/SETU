@@ -1,34 +1,44 @@
 // src/pages/DashboardPage.jsx
 
 import React from 'react';
-// 1. Import the PageWrapper component.
-import PageWrapper from '../components/layouts/PageWrapper';
 
-// Import the specific widgets this page needs.
+// Import all the widgets that will appear on the dashboard.
 import MapWidget from '../components/dashboard/MapWidget';
-import ChartWidget from '../components/dashboard/ChartWidget';
 import InsightsPanel from '../components/dashboard/InsightsPanel';
+import DataCharts from '../components/dashboard/ChartWidget';
 
 function DashboardPage() {
   return (
-    // 2. Wrap the entire page content within the PageWrapper.
-    // We provide a `title` and a `description` as props.
-    <PageWrapper
-      title="Species Explorer Dashboard"
-      description="An overview of marine biodiversity data, sightings, and AI-generated insights."
-    >
-      {/* 3. The unique content for this page (the grid of widgets) is passed as `children`. */}
-      {/* The wrapper will handle the title, description, and fade-in animation automatically. */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="md:col-span-2">
+    <div className="space-y-8">
+      
+      {/* Welcome Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800">CMLRE Species Explorer</h1>
+        <p className="mt-1 text-gray-600">
+          Welcome back, Jayanth. Here is the latest overview of the marine biodiversity data.
+        </p>
+      </div>
+
+      {/* Main Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Map takes up 2/3 of the width on large screens */}
+        <div className="lg:col-span-2">
           <MapWidget />
         </div>
-        <div className="md:col-span-2">
+
+        {/* AI Insights Panel takes up 1/3 */}
+        <div className="lg:col-span-1">
           <InsightsPanel />
         </div>
-        <ChartWidget />
+
+        {/* Data Chart takes the full width below the map */}
+        <div className="lg:col-span-3">
+          <DataCharts />
+        </div>
+        
       </div>
-    </PageWrapper>
+    </div>
   );
 }
 
