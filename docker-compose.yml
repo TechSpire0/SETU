@@ -24,6 +24,7 @@ services:
   # Defines our new frontend service
   frontend:
     container_name: marine_ui_service
+    platform: linux/amd64
     build: ./frontend
     ports:
       - "3000:3000"

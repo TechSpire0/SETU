@@ -1,28 +1,29 @@
 # 1. Use the official TensorFlow image with GPU support as our base.
+#    This is the most stable and reliable choice for an NVIDIA GPU setup.
 FROM tensorflow/tensorflow:2.13.0-gpu
 
 # 2. Set the default working directory inside the container.
 WORKDIR /code
 
-# --- NEW STEP: Install System-Level Dependencies ---
-# 3. Before installing Python packages, we must install the C libraries they depend on.
-#    - `apt-get update`: Refreshes the list of available system packages.
-#    - `apt-get install -y ...`: Installs the packages without asking for confirmation.
-#    - `libcairo2-dev`: The development files for the Cairo graphics library, required by pycairo.
-#    - `pkg-config`: A helper tool that allows build systems to find C libraries. The error log mentioned this was missing.
-RUN apt-get update && apt-get install -y \
-    libcairo2-dev \
-    pkg-config
-
-# 4. Copy ONLY the requirements file first to leverage Docker's cache.
+# 3. Copy our lean, pinned requirements file. This layer is cached.
 COPY ./requirements.txt /code/requirements.txt
 
-# 5. Now, run the pip install command. This will now succeed because the
-#    underlying 'cairo' library is present on the system.
+# 4. Install our Python dependencies. This will now succeed as we have
+#    removed the packages that required the failing system-level libraries.
 RUN pip install --no-cache-dir -r /code/requirements.txt
 
-# 6. Finally, copy the rest of your application code.
+# 5. Create a dedicated, non-root user for enhanced security.
+RUN useradd -ms /bin/bash appuser
+
+# 6. Copy the rest of your application code into the container.
 COPY . /code
 
-# 7. Specify the default command to execute when the container starts.
+# 7. Change the ownership of the code directory to our new user.
+RUN chown -R appuser:appuser /code
+
+# 8. Switch the context to run as the new non-root user.
+USER appuser
+
+# 9. Specify the default command to start the application.
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
