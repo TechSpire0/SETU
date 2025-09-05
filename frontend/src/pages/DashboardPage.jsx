@@ -15,7 +15,7 @@ function DashboardPage() {
       <div>
         <h1 className="text-3xl font-bold text-gray-800">CMLRE Species Explorer</h1>
         <p className="mt-1 text-gray-600">
-          Welcome back, Jayanth. Here is the latest overview of the marine biodiversity data.
+          Welcome back, by TechSpire Team. Here is the latest overview of the marine biodiversity data.
         </p>
       </div>
 

@@ -71,6 +71,7 @@ function ChartWidget() {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
+      <h1 className="text-lg font-semibold mb-4 text-gray-800">Heading</h1>
       {chartData ? (
         <Plot
           data={[chartData]}
