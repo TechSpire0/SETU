@@ -1,4 +1,4 @@
-// src/components/dashboard/ChartWidget.jsx
+// src/components/dashboard/DataCharts.jsx
 
 import React, { useMemo } from "react";
 import Plot from "react-plotly.js"; // The Plotly component
@@ -82,6 +82,7 @@ function ChartWidget() {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
+      <h1 className="text-lg font-semibold mb-4 text-gray-800">Heading</h1>
       {chartData ? (
         <Plot
           data={[chartData]}

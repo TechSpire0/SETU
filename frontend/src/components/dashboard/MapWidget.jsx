@@ -32,6 +32,10 @@ const tileLayers = {
       attribution: "Labels &copy; Esri",
     },
   },
+  // dark: {
+  //   url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  //   attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+  // }
 };
 
 const getSightingsData = () => apiClient.get("/sightings");
@@ -67,7 +71,7 @@ function MapWidget() {
           onClick={() => setActiveLayer("standard")}
           className={`px-3 py-1 text-xs font-semibold rounded transition-colors ${
             activeLayer === "standard"
-              ? "bg-blue-600 text-white"
+              ? "bg-slate-900 text-white"
               : "bg-white text-gray-700 hover:bg-gray-100"
           }`}
         >
@@ -77,7 +81,7 @@ function MapWidget() {
           onClick={() => setActiveLayer("satellite")}
           className={`px-3 py-1 text-xs font-semibold rounded transition-colors ${
             activeLayer === "satellite"
-              ? "bg-blue-600 text-white"
+              ? "bg-slate-900 text-white"
               : "bg-white text-gray-700 hover:bg-gray-100"
           }`}
         >
@@ -91,13 +95,16 @@ function MapWidget() {
         style={{ height: "100%", width: "100%" }}
         className="z-0"
       >
-        {/* Standard */}
+        {/* Standard / Dark */}
         {activeLayer === "standard" && (
           <TileLayer
             url={tileLayers.standard.url}
             attribution={tileLayers.standard.attribution}
           />
         )}
+        {/* {activeLayer === 'dark' && (
+          <TileLayer url={tileLayers.dark.url} attribution={tileLayers.dark.attribution} />
+        )} */}
 
         {/* Satellite with labels */}
         {activeLayer === "satellite" && (

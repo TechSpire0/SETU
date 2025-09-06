@@ -1,5 +1,3 @@
-// src/components/dashboard/InsightsPanel.jsx
-
 import React from "react";
 import useApi from "../../hooks/useApi";
 import apiClient from "../../services/apiClient";
@@ -26,17 +24,8 @@ const LightbulbIcon = () => (
 const getHypothesis = () => apiClient.get("/hypotheses");
 
 function InsightsPanel() {
-  // We rename 'data' to 'hypothesisData' for clarity.
   const { data: hypothesisData, loading, error } = useApi(getHypothesis);
 
-  // --- LOG #1: Check the raw output from the useApi hook ---
-  console.log("[InsightsPanel] Data from useApi hook:", {
-    hypothesisData,
-    loading,
-    error,
-  });
-
-  // Render a loading state while the data is being fetched.
   if (loading) {
     return (
       <div className="bg-white p-6 rounded-lg shadow-md animate-pulse">
@@ -50,7 +39,6 @@ function InsightsPanel() {
     );
   }
 
-  // Render an error message if the API call fails.
   if (error) {
     console.error("[InsightsPanel] API Error:", error);
     return (
@@ -62,13 +50,17 @@ function InsightsPanel() {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md h-full">
+      {/* Header with Chatbot button at the end */}
       <div className="flex items-center mb-4 text-gray-800">
         <LightbulbIcon />
         <h3 className="text-lg font-semibold ml-2">AI-Generated Insight</h3>
+
+        {/* Chatbot button two spaces after text */}
+        <button className="ml-2 px-3 py-1 text-xs font-medium bg-black text-white rounded hover:bg-gray-800 transition-colors">
+          Chatbot
+        </button>
       </div>
 
-      {/* --- THE FIX IS HERE --- */}
-      {/* We now check if the single 'hypothesisData' object exists, instead of mapping an array. */}
       {hypothesisData ? (
         <div className="animate-fade-in">
           <p className="text-lg text-gray-700 italic">
@@ -101,7 +93,6 @@ function InsightsPanel() {
           </div>
         </div>
       ) : (
-        // This will be shown if the API returns no data.
         <div className="text-center text-gray-500 py-8">
           <p>No new insights available at this time.</p>
         </div>
